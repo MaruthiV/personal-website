@@ -50,6 +50,10 @@ export function HeaderSection() {
         <p className="text-muted-foreground text-[15px] leading-relaxed max-w-[590px]">
           {profile.bio}
         </p>
+        <p className="text-muted-foreground text-[15px] leading-relaxed mt-3">
+          <span className="text-foreground font-medium">Currently:</span>{" "}
+          {profile.currently.join(" and ")}.
+        </p>
       </div>
 
       <div className="flex-shrink-0">

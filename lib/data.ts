@@ -1,6 +1,10 @@
 export const profile = {
   name: "Maruthi Vemula",
   bio: "Student at UNC Chapel Hill studying Computer Science and Business Administration. Passionate about AI, finance, and building things that matter.",
+  currently: [
+    "Working at a health-tech startup called Careset",
+    "Researching stochastic volatility modeling",
+  ],
   image: "/images/maruthi_deca.JPG",
   social: {
     github: "https://github.com/MaruthiV",
