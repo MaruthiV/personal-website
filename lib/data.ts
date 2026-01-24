@@ -120,4 +120,8 @@ export const art: ArtItem[] = [
   { title: "The Lean Startup", type: "book", rating: 8.0 },
   { title: "The Brothers Karamazov", type: "book", rating: 8.8 },
   { title: "The Dark Knight", type: "movie", rating: 10.0 },
+  { title: "Swades", type: "movie", rating: 9.2 },
+  { title: "Yeh Jawani Hai Deewani", type: "movie", rating: 9.5 },
+  { title: "Industry", type: "tv", rating: 8.9 },
+  { title: "Better Call Saul", type: "tv", rating: 9.1 },
 ]
