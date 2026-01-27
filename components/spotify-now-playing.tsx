@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -10,11 +12,13 @@ interface NowPlaying {
   songUrl?: string
 }
 
-export default function SpotifyNowPlaying() {
-  const [nowPlaying, setNowPlaying] = useState<NowPlaying>({ isPlaying: false })
-  const [isLoading, setIsLoading] = useState(true)
+export function SpotifyNowPlaying() {
+  const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+
     const fetchNowPlaying = async () => {
       try {
         const response = await fetch("/api/spotify/now-playing")
@@ -22,61 +26,68 @@ export default function SpotifyNowPlaying() {
         setNowPlaying(data)
       } catch (error) {
         console.error("Error fetching now playing:", error)
-      } finally {
-        setIsLoading(false)
+        setNowPlaying({ isPlaying: false })
       }
     }
 
     fetchNowPlaying()
-    const interval = setInterval(fetchNowPlaying, 30000) // Update every 30 seconds
+    const interval = setInterval(fetchNowPlaying, 30000)
 
     return () => clearInterval(interval)
   }, [])
 
-  if (isLoading) {
+  if (!mounted) {
     return (
-      <div className="bg-gray-800 p-4 rounded-lg animate-pulse">
-        <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
-        <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+      <div className="flex items-center gap-3 text-[15px] text-muted-foreground">
+        <span>Loading...</span>
       </div>
     )
   }
 
-  if (!nowPlaying.isPlaying) {
+  if (!nowPlaying) {
     return (
-      <div className="bg-gray-800 p-4 rounded-lg text-center">
-        <p className="text-gray-400">not listening to anything right now - either sleeping or contemplating dostoevsky :)</p>
+      <div className="flex items-center gap-3 text-[15px] text-muted-foreground">
+        <span>Loading...</span>
       </div>
     )
   }
 
-  return (
-    <div className="bg-gray-800 p-4 rounded-lg">
-      <div className="flex items-center space-x-4">
+  // If we have track info (either playing or last played)
+  if (nowPlaying.title) {
+    return (
+      <div className="flex items-center gap-3 text-[15px]">
         {nowPlaying.albumImageUrl && (
-          <div className="relative w-16 h-16">
+          <div className="relative w-10 h-10 flex-shrink-0">
             <Image
               src={nowPlaying.albumImageUrl}
               alt="Album cover"
               fill
-              className="rounded-lg"
+              className="rounded object-cover"
             />
           </div>
         )}
-        <div className="flex-1">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className="text-muted-foreground flex-shrink-0">
+            {nowPlaying.isPlaying ? "Listening to" : "Last played"}
+          </span>
           <Link
             href={nowPlaying.songUrl || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white hover:text-cyan-400 transition-colors"
+            className="hover:underline truncate"
           >
-            <h3 className="font-press-start text-sm text-cyan-400 mb-1">
-              {nowPlaying.title}
-            </h3>
+            <span className="font-medium">{nowPlaying.title}</span>
+            <span className="text-muted-foreground"> by {nowPlaying.artist}</span>
           </Link>
-          <p className="text-gray-400 text-sm">{nowPlaying.artist}</p>
         </div>
       </div>
+    )
+  }
+
+  // Fallback if no track data at all
+  return (
+    <div className="flex items-center gap-3 text-[15px]">
+      <span className="text-muted-foreground">Not playing anything right now</span>
     </div>
   )
-} 
+}

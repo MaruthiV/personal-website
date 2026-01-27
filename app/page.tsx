@@ -2,6 +2,7 @@ import { HeaderSection } from "@/components/header-section"
 import { PostsColumn } from "@/components/posts-column"
 import { ProjectsColumn } from "@/components/projects-column"
 import { ArtColumn } from "@/components/art-column"
+import { SpotifyNowPlaying } from "@/components/spotify-now-playing"
 
 export default function Home() {
   return (
@@ -13,6 +14,10 @@ export default function Home() {
         <ProjectsColumn />
         <ArtColumn />
       </div>
+
+      <footer className="mt-16 pt-8 border-t border-border flex justify-center">
+        <SpotifyNowPlaying />
+      </footer>
     </main>
   )
 }
