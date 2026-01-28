@@ -15,6 +15,11 @@ export const profile = {
 
 export const posts = [
   {
+    title: "How Graph Attention Networks Work",
+    date: "Jan 2026",
+    slug: "how-graph-attention-networks-work",
+  },
+  {
     title: "Why Knowledge is Key",
     date: "Oct 2025",
     slug: "why-knowledge-is-key",
