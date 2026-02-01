@@ -121,6 +121,7 @@ export type ArtItem = {
 
 // Placeholder art data - user should fill in their own
 export const art: ArtItem[] = [
+  { title: "Casino Royale", type: "movie", rating: 9.8 },
   { title: "The Social Network", type: "movie", rating: 9.5 },
   { title: "Breaking Bad", type: "tv", rating: 9.8 },
   { title: "Zero to One", type: "book", rating: 9.0 },
