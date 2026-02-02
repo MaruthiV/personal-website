@@ -15,6 +15,11 @@ export const profile = {
 
 export const posts = [
   {
+    title: "How Agent Swarms Actually Work",
+    date: "Feb 2026",
+    slug: "how-agent-swarms-work",
+  },
+  {
     title: "How Graph Attention Networks Work",
     date: "Jan 2026",
     slug: "how-graph-attention-networks-work",
