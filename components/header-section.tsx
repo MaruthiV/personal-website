@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github, Linkedin, Twitter } from "lucide-react"
+import { Github, Linkedin, Twitter, Mail } from "lucide-react"
 import { profile } from "@/lib/data"
 import { ThemeToggle } from "./theme-toggle"
 
@@ -44,6 +44,13 @@ export function HeaderSection() {
               aria-label="LinkedIn"
             >
               <Linkedin className="h-4 w-4" />
+            </Link>
+            <Link
+              href="mailto:vemula.maruthimukhesh@gmail.com"
+              className="p-1.5 hover:bg-muted rounded-full transition-colors"
+              aria-label="Email"
+            >
+              <Mail className="h-4 w-4" />
             </Link>
           </div>
         </div>
