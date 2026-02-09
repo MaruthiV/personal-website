@@ -38,6 +38,18 @@ export const posts = [
 
 export const projects = [
   {
+    name: "Deep Research Agent",
+    slug: "deep-research-agent",
+    description: "AI agent that iteratively searches the web and produces sourced reports",
+    longDescription: `I built this because I was frustrated with how shallow most AI research tools are. You ask a question, you get a summary of the first few search results, and that's it. I wanted something that actually does what a human researcher would do - search, find gaps in knowledge, search again, and keep going until you have a comprehensive answer.
+
+The agent works in iterations. It searches the web, analyzes what it found, identifies what's still missing, and runs more targeted searches to fill those gaps. For complex topics, it breaks the question into sections and researches each one in parallel. The results are sourced reports with citations so you can verify everything.
+
+I also integrated Honcho for memory, so the agent learns your interests over time and personalizes results. The tech stack is Python with FastAPI on the backend, LiteLLM for the AI layer (using GPT-4o), Tavily for web search, and a React frontend.`,
+    tags: ["Python", "FastAPI", "LiteLLM", "React"],
+    link: { label: "View on GitHub", url: "https://github.com/MaruthiV/deep-research-agent" },
+  },
+  {
     name: "SplitShare",
     slug: "splitshare",
     description: "Platform for securely splitting recurring subscriptions",
