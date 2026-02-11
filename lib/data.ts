@@ -38,6 +38,18 @@ export const posts = [
 
 export const projects = [
   {
+    name: "Mini-vLLM",
+    slug: "mini-vllm",
+    description: "High-performance LLM inference engine with PagedAttention",
+    longDescription: `I wanted to really understand how production LLM serving works under the hood, so I built my own inference engine inspired by vLLM. The key insight is that naive inference wastes a ton of GPU memory on the KV cache - the attention states that grow with each token generated.
+
+Mini-vLLM implements PagedAttention, which manages the KV cache like an operating system manages virtual memory - in fixed-size blocks that can be allocated and freed dynamically. This eliminates fragmentation and lets you serve way more concurrent requests. I also added continuous batching (dynamically scheduling requests for maximum throughput), prefix caching (sharing cached system prompts across requests), and speculative decoding for faster generation.
+
+The whole thing runs on custom Triton GPU kernels I wrote for the paged attention operations. It achieves 2-3x throughput over naive HuggingFace inference and exposes an OpenAI-compatible API so it's a drop-in replacement.`,
+    tags: ["Python", "Triton", "CUDA", "LLMs"],
+    link: { label: "View on GitHub", url: "https://github.com/MaruthiV/vLLM" },
+  },
+  {
     name: "Deep Research Agent",
     slug: "deep-research-agent",
     description: "AI agent that iteratively searches the web and produces sourced reports",
