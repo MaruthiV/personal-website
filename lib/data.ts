@@ -169,4 +169,5 @@ export const art: ArtItem[] = [
   { title: "Yeh Jawani Hai Deewani", type: "movie", rating: 9.5 },
   { title: "Industry", type: "tv", rating: 8.9 },
   { title: "Better Call Saul", type: "tv", rating: 9.1 },
+  { title: "Entourage", type: "tv", rating: 9.4 },
 ]
