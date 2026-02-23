@@ -15,6 +15,11 @@ export const profile = {
 
 export const posts = [
   {
+    title: "What Ed-Tech Gets Wrong",
+    date: "Feb 2026",
+    slug: "what-edtech-gets-wrong",
+  },
+  {
     title: "How Agent Swarms Actually Work",
     date: "Feb 2026",
     slug: "how-agent-swarms-work",
