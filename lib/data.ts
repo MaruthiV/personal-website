@@ -10,6 +10,7 @@ export const profile = {
     github: "https://github.com/MaruthiV",
     linkedin: "https://www.linkedin.com/in/maruthivemula",
     twitter: "https://x.com/VemVemRu",
+    scholar: "https://scholar.google.com/citations?user=STq205AAAAAJ&hl=en",
   },
 }
 
