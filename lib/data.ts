@@ -2,8 +2,8 @@ export const profile = {
   name: "Maruthi Vemula",
   bio: "Student at UNC Chapel Hill studying Computer Science and Business Administration. Passionate about AI, finance, and building things that matter.",
   currently: [
-    "Working at a health-tech startup called Careset",
-    "Researching stochastic volatility modeling",
+    "learning real estate finance",
+    "diffusion models",
   ],
   image: "/images/maruthi_deca.JPG",
   social: {
@@ -42,6 +42,18 @@ export const posts = [
 ]
 
 export const projects = [
+  {
+    name: "Spectra",
+    slug: "spectra",
+    description: "First WebGPU implementation of EAGLE-3 speculative decoding, running LLM inference entirely in the browser",
+    longDescription: `I set out to ship a 2x browser LLM speedup using EAGLE-3 speculative decoding - small open models running entirely in WebGPU with no server round-trips. The idea: pair a Qwen3-1.7B target model with a tiny EAGLE-3 draft head that proposes several tokens at once, and let the target verify them in a single pass. Everything quantized to q4f16_1 and running in the browser.
+
+I started by trying to train my own draft head. Three EAGLE-1 attempts and an EAGLE-3 test-time-training run later (about $45 in Modal credits over two weeks), I kept plateauing below the acceptance rate needed for a real speedup. Reading the SpecForge source revealed three bugs in my training recipe - missing multi-layer hidden-state fusion, no draft vocab subset, and wrong rollout semantics - so I pivoted to AngelSlim's correctly-trained pretrained head and put my energy into the runtime instead. That meant forking mlc-llm to add an entirely new eagle3 model type (~350 LoC) and forking web-llm to expose the internal spec-decoding APIs.
+
+The result is, as far as I can tell, the first public WebGPU implementation of EAGLE-3. The output is byte-identical to the greedy baseline, so correctness is proven. But here's the honest part: it's still slower than baseline (0.59x - 40 tok/s vs 67). The wall is architectural - chain decoding with acceptance ~0.39 can't beat the browser's target-verify floor, and the 2x results in the papers come from tree decoding, which mlc-llm's KV cache doesn't support yet. I wrote the whole thing up as a postmortem because the negative result and the architectural diagnosis are the actually useful parts.`,
+    tags: ["WebGPU", "Speculative Decoding", "LLMs", "TypeScript"],
+    link: { label: "View on GitHub", url: "https://github.com/MaruthiV/spectra" },
+  },
   {
     name: "Mini-vLLM",
     slug: "mini-vllm",
