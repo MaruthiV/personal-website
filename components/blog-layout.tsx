@@ -18,25 +18,19 @@ interface BlogLayoutProps {
 
 export function BlogLayout({ title, date, toc, children }: BlogLayoutProps) {
   const handleScrollTo = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
-    <main className="min-h-screen px-6 py-12">
-      {/* Table of Contents - Fixed position on the left */}
-      <nav className="hidden xl:block fixed left-[calc(50%-28rem-12rem)] top-[280px] w-48">
+    <main className="min-h-screen px-6 pb-24 pt-16">
+      {/* Table of contents — fixed to the left of the column on wide screens */}
+      <nav className="fixed left-[calc(50%-40rem)] top-40 hidden w-48 xl:block">
         <ul className="space-y-2 text-sm">
           {toc.map((item) => (
-            <li
-              key={item.id}
-              style={{ paddingLeft: `${(item.level - 1) * 12}px` }}
-            >
+            <li key={item.id} style={{ paddingLeft: `${(item.level - 1) * 12}px` }}>
               <button
                 onClick={() => handleScrollTo(item.id)}
-                className="text-left text-muted-foreground hover:text-foreground transition-colors"
+                className="text-left text-muted-foreground transition-colors hover:text-foreground"
               >
                 {item.title}
               </button>
@@ -45,24 +39,21 @@ export function BlogLayout({ title, date, toc, children }: BlogLayoutProps) {
         </ul>
       </nav>
 
-      <div className="max-w-2xl mx-auto">
-        {/* Home link */}
+      <div className="mx-auto max-w-[840px]">
         <Link
-          href="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-16"
+          href="/blogs"
+          className="inline-flex items-center gap-1.5 text-base text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Home
+          <ArrowLeft className="h-4 w-4" />
+          Back
         </Link>
 
-        {/* Title */}
-        <header className="text-center mb-20">
-          <h1 className="text-3xl font-bold mb-2">{title}</h1>
-          <p className="text-sm text-muted-foreground">{date}</p>
+        <header className="mb-12 mt-12">
+          <h1 className="text-3xl font-bold sm:text-4xl">{title}</h1>
+          <p className="mt-2 text-base text-muted-foreground">{date}</p>
         </header>
 
-        {/* Main Content */}
-        <article className="prose prose-neutral dark:prose-invert max-w-none">
+        <article className="prose prose-lg prose-neutral max-w-none dark:prose-invert prose-headings:font-semibold">
           {children}
         </article>
       </div>

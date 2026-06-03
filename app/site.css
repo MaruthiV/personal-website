@@ -1,0 +1,238 @@
+/* Recently Played Shelf — minimalist grayscale vinyl-sleeve shelf, scoped to /v2.
+   Closed = flat gray sleeve edge (NO rotateY/perspective) with a thin album-color
+   accent strip. Only the ACTIVE item mounts a 3D cover that hinges toward the
+   viewer (rotateY 90→0 on the left edge) and a disc that slides out mid-open.
+   Width is real layout, so the active item pushes its neighbors aside. */
+
+.shelf {
+  --closed-w: 19px;
+  --active-size: 140px;
+  --rec-h: 140px;
+  --spine-h: 140px;
+  --gap: 7px;
+  --anim: 0.9s;
+  --hover-anim: 180ms;
+  --disc-peek: 46px;
+  --ease: cubic-bezier(0.33, 0, 0.18, 1);
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--gap);
+  padding: 44px 0 4px;
+}
+
+/* Slot — real width + bookshelf lean (rotateZ only, no 3D) */
+.vinyl {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--closed-w);
+  height: var(--spine-h);
+  margin-right: 0;
+  transform-origin: bottom center;
+  transform: rotate(var(--lean, 0deg));
+  transition: width var(--anim) var(--ease), height var(--anim) var(--ease),
+    margin-right var(--anim) var(--ease), transform var(--anim) var(--ease);
+}
+.vinyl.is-open {
+  width: var(--active-size);
+  height: var(--active-size);
+  margin-right: calc(var(--disc-peek) + 6px);
+  transform: rotate(0deg);
+  z-index: 20;
+}
+.vinyl:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.45);
+  outline-offset: 4px;
+}
+
+/* Lift — hover-only reaction (fast) */
+.vinyl__lift {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  transition: transform var(--hover-anim) ease;
+}
+.vinyl.is-hover:not(.is-open) .vinyl__lift {
+  transform: translateY(-9px) scale(1.03);
+}
+
+/* Closed sleeve edge — flat gray, bevel, thin color accent on the binding edge */
+.vinyl__spine {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: var(--gray-bg, #0d1b2a);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset -2px 0 5px rgba(0, 0, 0, 0.45), inset 1px 0 0 rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: filter var(--hover-anim) ease;
+}
+.vinyl__spine::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent, #888);
+  transition: width var(--hover-anim) ease, filter var(--hover-anim) ease;
+}
+.vinyl.is-hover:not(.is-open) .vinyl__spine {
+  filter: brightness(1.04);
+}
+.vinyl.is-hover:not(.is-open) .vinyl__spine::before {
+  width: 4px;
+  filter: brightness(1.15) saturate(1.25);
+}
+
+/* Active-only 3D cover. Hidden (not just transparent) when closed so closed
+   items never show the cover and have no perspective. */
+.vinyl__cover-wrap {
+  position: absolute;
+  inset: 0;
+  perspective: 1100px;
+  visibility: hidden;
+  transition: visibility 0s linear var(--anim);
+}
+.vinyl.is-open .vinyl__cover-wrap {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+/* Cover hinges toward the viewer: rotateY 90deg → 0deg on the left edge */
+.vinyl__cover {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--active-size);
+  height: var(--rec-h);
+  object-fit: cover;
+  border-radius: 2px;
+  transform-origin: left center;
+  transform: rotateY(90deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.45), 0 6px 22px -14px var(--accent-soft);
+  z-index: 2;
+  transition: transform var(--anim) var(--ease);
+}
+.vinyl.is-open .vinyl__cover {
+  transform: rotateY(0deg);
+}
+
+/* Black vinyl disc — behind the cover, slides out via translateX ~halfway in */
+.vinyl__disc {
+  position: absolute;
+  top: 50%;
+  right: calc(-1 * var(--disc-peek));
+  width: calc(var(--active-size) * 0.85);
+  height: calc(var(--active-size) * 0.85);
+  border-radius: 50%;
+  background: radial-gradient(circle, #3a3a3a 0 15%, #0d0d0d 15% 18%, #1c1c1c 18% 100%);
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  visibility: hidden;
+  /* Tucked fully behind the cover (no part peeking) when not active. */
+  transform: translateY(-50%) translateX(calc(-1 * (var(--disc-peek) + 14px)));
+  /* Closing is INSTANT — the disc vanishes/resets immediately so it never
+     lingers behind the closing sleeve or appears to jump to the next album. */
+  transition: transform 0s, visibility 0s;
+  pointer-events: none;
+}
+.vinyl.is-open .vinyl__disc {
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+  /* Stay hidden behind the cover until it's ~formed (76%), then slide the peek
+     out quickly so it's fully out just as the album finishes opening (~98%). */
+  transition: transform calc(var(--anim) * 0.22) var(--ease) calc(var(--anim) * 0.76),
+    visibility 0s linear calc(var(--anim) * 0.76);
+}
+
+/* Tooltip — hover only */
+.vinyl__tooltip {
+  position: absolute;
+  bottom: calc(var(--spine-h) + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.3;
+  padding: 5px 9px;
+  border-radius: 7px;
+  white-space: nowrap;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity var(--hover-anim) ease, transform var(--hover-anim) ease;
+}
+.vinyl.is-hover:not(.is-open) .vinyl__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Grounding shelf line — contained, clear of the caption */
+.shelf-line {
+  height: 1px;
+  margin: 12px auto 0;
+  max-width: 72%;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.14), transparent);
+  box-shadow: 0 8px 16px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Caption — fades/slides on active change (key remount) */
+.shelf-caption {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  animation: shelf-caption-in 320ms ease;
+}
+@keyframes shelf-caption-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion: no 3D turn / slide — simple resize + appear */
+@media (prefers-reduced-motion: reduce) {
+  .vinyl,
+  .vinyl__lift {
+    transition-duration: 200ms;
+  }
+  .vinyl__cover {
+    transform: none !important;
+    transition: none;
+  }
+  .vinyl__disc {
+    transform: translateY(-50%) translateX(0) !important;
+    transition: none;
+  }
+  .vinyl.is-hover:not(.is-open) .vinyl__lift {
+    transform: translateY(-6px);
+  }
+  .shelf-caption {
+    animation: none;
+  }
+}
