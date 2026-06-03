@@ -95,9 +95,20 @@ function tiltFor(i: number, active: number) {
   return (d < 0 ? -1 : 1) * mag
 }
 
-export function RecentlyPlayedShelf({ initialActive = 0 }: { initialActive?: number }) {
-  const [discs, setDiscs] = useState<Disc[]>(FALLBACK)
-  const [active, setActive] = useState(initialActive)
+export function RecentlyPlayedShelf({
+  initialActive = 0,
+  initialDiscs,
+}: {
+  initialActive?: number
+  initialDiscs?: Disc[]
+}) {
+  // Seed from server-fetched albums when available so the first paint shows real
+  // data; only fall back to the hardcoded list if the server had nothing.
+  const seed = initialDiscs && initialDiscs.length > 0 ? initialDiscs : FALLBACK
+  const [discs, setDiscs] = useState<Disc[]>(seed)
+  const [active, setActive] = useState(() =>
+    Math.min(Math.max(0, initialActive), seed.length - 1),
+  )
   const [hovered, setHovered] = useState<number | null>(null)
   const [accents, setAccents] = useState<Record<number, [number, number, number]>>({})
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([])

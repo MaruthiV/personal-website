@@ -3,6 +3,7 @@ import { projects } from "@/lib/data"
 import { Em } from "@/components/v2/em"
 import { RecentlyPlayedShelf } from "@/components/v2/recently-played-shelf"
 import { SiteShell } from "@/components/v2/site-shell"
+import { getShelfItems } from "@/lib/spotify"
 
 const linkClass =
   "underline underline-offset-2 decoration-foreground/40 transition-colors hover:decoration-foreground"
@@ -24,6 +25,17 @@ export default async function Home({
   const disc = sp.disc != null && sp.disc !== "" ? Number(sp.disc) : null
   // Default: most-recent record (index 0) popped open.
   const initialActive = disc != null && Number.isFinite(disc) ? disc : 0
+
+  // Fetch the shelf server-side so the first paint already shows real albums —
+  // no flash of the hardcoded fallback. The client still refreshes on mount.
+  // (Accessing searchParams above already opts this page into dynamic rendering,
+  // so this runs fresh per request.)
+  let initialDiscs: Awaited<ReturnType<typeof getShelfItems>> = []
+  try {
+    initialDiscs = await getShelfItems(15)
+  } catch {
+    initialDiscs = []
+  }
 
   return (
     <SiteShell>
@@ -94,7 +106,7 @@ export default async function Home({
 
         {/* Recently played — vinyl shelf. Breaks out wider than the text column. */}
         <div className="relative left-1/2 mt-12 w-[min(94vw,900px)] -translate-x-1/2">
-          <RecentlyPlayedShelf initialActive={initialActive} />
+          <RecentlyPlayedShelf initialActive={initialActive} initialDiscs={initialDiscs} />
         </div>
       </main>
     </SiteShell>
