@@ -105,7 +105,7 @@ export function RecentlyPlayedShelf({
   // Seed from server-fetched albums when available so the first paint shows real
   // data; only fall back to the hardcoded list if the server had nothing.
   const seed = initialDiscs && initialDiscs.length > 0 ? initialDiscs : FALLBACK
-  const [discs, setDiscs] = useState<Disc[]>(seed)
+  const [discs] = useState<Disc[]>(seed)
   const [active, setActive] = useState(() =>
     Math.min(Math.max(0, initialActive), seed.length - 1),
   )
@@ -113,21 +113,8 @@ export function RecentlyPlayedShelf({
   const [accents, setAccents] = useState<Record<number, [number, number, number]>>({})
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([])
 
-  useEffect(() => {
-    let cancelled = false
-    fetch("/api/spotify/recent-albums", { cache: "no-store" })
-      .then((r) => r.json())
-      .then((d) => {
-        if (!cancelled && Array.isArray(d.items) && d.items.length > 0) {
-          setDiscs(d.items)
-          setActive((a) => Math.min(a, d.items.length - 1))
-        }
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  // No client-side re-fetch: the server seeds real albums via `initialDiscs`
+  // (cached in lib/spotify), so the shelf is already correct on first paint.
 
   // Pull the real dominant color from each cover for the accent strip.
   useEffect(() => {
