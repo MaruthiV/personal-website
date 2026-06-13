@@ -24,7 +24,7 @@ export function BlogLayout({ title, date, toc, children }: BlogLayoutProps) {
   return (
     <main className="min-h-screen px-6 pb-24 pt-16">
       {/* Table of contents — fixed to the left of the column on wide screens */}
-      <nav className="fixed left-[calc(50%-40rem)] top-40 hidden w-48 xl:block">
+      <nav className="fixed left-[calc(50%-40rem)] top-40 hidden w-48 xl:block 2xl:left-[calc(50%-44rem)]">
         <ul className="space-y-2 text-sm">
           {toc.map((item) => (
             <li key={item.id} style={{ paddingLeft: `${(item.level - 1) * 12}px` }}>

@@ -16,6 +16,11 @@ export const profile = {
 
 export const posts = [
   {
+    title: "Why Attention Ended Up Being All We Needed",
+    date: "Jun 2026",
+    slug: "deriving-attention-from-scratch",
+  },
+  {
     title: "What Ed-Tech Gets Wrong",
     date: "Feb 2026",
     slug: "what-edtech-gets-wrong",
