@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, ExternalLink } from "lucide-react"
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react"
 import { notFound } from "next/navigation"
 import { projects } from "@/lib/data"
 
@@ -30,16 +30,29 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <article className="mt-12">
         <h1 className="text-3xl font-bold sm:text-4xl">{project.name}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{project.tags.join("  ·  ")}</p>
-        {project.link && (
-          <Link
-            href={project.link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-1 text-base underline decoration-foreground/40 underline-offset-2 transition-colors hover:decoration-foreground"
-          >
-            {project.link.label}
-            <ExternalLink className="h-3.5 w-3.5" />
-          </Link>
+        {(project.link || project.blogSlug) && (
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+            {project.link && (
+              <Link
+                href={project.link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-base underline decoration-foreground/40 underline-offset-2 transition-colors hover:decoration-foreground"
+              >
+                {project.link.label}
+                <ExternalLink className="h-3.5 w-3.5" />
+              </Link>
+            )}
+            {project.blogSlug && (
+              <Link
+                href={`/blog/${project.blogSlug}`}
+                className="inline-flex items-center gap-1 text-base underline decoration-foreground/40 underline-offset-2 transition-colors hover:decoration-foreground"
+              >
+                Read the writeup
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
+          </div>
         )}
         <p className="mt-8 whitespace-pre-line text-lg leading-relaxed text-foreground">
           {project.longDescription}

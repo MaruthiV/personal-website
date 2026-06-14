@@ -54,6 +54,17 @@ export const posts = [
 
 export const projects = [
   {
+    name: "nanoOasis",
+    slug: "nano-oasis",
+    description: "A diffusion world model you can play in the browser — Snake with no game engine",
+    longDescription: `nanoOasis is a diffusion world model. There is no game engine underneath the Snake you play, no grid and no collision code. A neural network hallucinates every frame one at a time, reacting to your keypresses, and it learned the snake, the apple, growing when you eat, and dying when you hit a wall purely from watching pixels. The whole stack is about 2,400 lines of Python, trains end to end for under $50, and runs in your browser over WebGPU.
+
+Getting there was mostly failure. Snake is the fourth game I tried: a platformer was too static to learn from, and Breakout burned roughly $600 of training runs on a ball that kept fading and bricks that would not break. The unlock was not a smarter model but a problem shaped to fit one, a grid game where a single cell is exactly one of the model's tokens, so nothing it ever has to draw is smaller than its atomic unit. The full story, with the math, is in the writeup.`,
+    tags: ["Diffusion Models", "World Models", "WebGPU", "Python"],
+    link: { label: "View on GitHub", url: "https://github.com/MaruthiV/nanoOasis" },
+    blogSlug: "nano-oasis",
+  },
+  {
     name: "Spectra",
     slug: "spectra",
     description: "First WebGPU implementation of EAGLE-3 speculative decoding, running LLM inference entirely in the browser",
