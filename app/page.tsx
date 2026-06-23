@@ -10,8 +10,8 @@ const linkClass =
 
 // "Latest work" — the two most recent projects, each a one-liner.
 const latest = [
+  { slug: "ledger-residuals", line: "a controlled test of whether massive activations are just an architectural artifact" },
   { slug: "nano-oasis", line: "a diffusion world model you play in the browser — Snake, no game engine" },
-  { slug: "spectra", line: "in-browser LLM inference with EAGLE-3 speculative decoding" },
 ]
   .map((s) => ({ ...s, project: projects.find((p) => p.slug === s.slug)! }))
   .filter((s) => s.project)
