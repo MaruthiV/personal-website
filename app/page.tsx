@@ -10,8 +10,8 @@ const linkClass =
 
 // "Latest work" — the two most recent projects, each a one-liner.
 const latest = [
-  { slug: "ledger-residuals", line: "a controlled test of whether massive activations are just an architectural artifact" },
-  { slug: "nano-oasis", line: "a diffusion world model you play in the browser — Snake, no game engine" },
+  { slug: "eviction-as-estimation", line: "a fixed-lag smoothing view of KV cache eviction" },
+  { slug: "nano-oasis", line: "a diffusion world model you play in the browser, Snake with no game engine" },
 ]
   .map((s) => ({ ...s, project: projects.find((p) => p.slug === s.slug)! }))
   .filter((s) => s.project)
@@ -54,32 +54,28 @@ export default async function Home({
             </Link>{" "}
             studying computer science and business. I’ve previously worked at{" "}
             <Link
+              href="https://www.eleuther.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              EleutherAI
+            </Link>{" "}
+            and{" "}
+            <Link
               href="https://careset.com"
               target="_blank"
               rel="noopener noreferrer"
               className={linkClass}
             >
               CareSet
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="https://humun.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={linkClass}
-            >
-              Humanity Unleashed
             </Link>
-            , and I’m now focused on diffusion models.
+            , and I’m now focused on sequential decision making.
           </p>
           <p>
-            I’m most interested in building <Em>intelligent systems</Em> that make hard decisions
-            feel simple, and in helping people see the forces quietly shaping their lives.
-          </p>
-          <p>
-            I tend to think about the world macroeconomically. Being curious about a piece of
-            technology quickly turns into being curious about the <Em>supply chains</Em> behind it
-            and the <Em>markets</Em> it reshapes, and following that thread is the part I enjoy most.
+            I really like discerning the macroeconomic <Em>infrastructure</Em> that quietly shapes
+            the world. Following how a single shift ripples outward into the <Em>markets</Em> and{" "}
+            <Em>energy systems</Em> that get reshaped along with it is the part I enjoy most.
           </p>
         </div>
 
@@ -89,7 +85,7 @@ export default async function Home({
           {latest.map(({ project, line }) => (
             <li
               key={project.slug}
-              className="grid grid-cols-1 items-baseline gap-x-6 sm:grid-cols-[150px_1fr]"
+              className="grid grid-cols-1 items-baseline gap-x-6 sm:grid-cols-[195px_1fr]"
             >
               <Link
                 href={project.link?.url ?? `/projects`}

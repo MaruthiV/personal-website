@@ -91,7 +91,7 @@ export default function NanoOasis() {
         <Figure
           src="/images/blog/nano-oasis/snake-demo.gif"
           alt="The model generating Snake, frame by frame"
-          caption="The model generating Snake one frame at a time. No engine underneath — every pixel is a prediction."
+          caption="The model generating Snake one frame at a time. No engine underneath, every pixel is a prediction."
           width={560}
           height={424}
           maxWidth={520}
@@ -197,7 +197,7 @@ export default function NanoOasis() {
       <Figure
         src="/images/blog/nano-oasis/breakout-ghosting-rollout.png"
         alt="Over a rollout the Breakout ball ghosts and fades"
-        caption="Over a long rollout the Breakout ball ghosts and fades — the model drifting on its own slightly-wrong history."
+        caption="Over a long rollout the Breakout ball ghosts and fades, the model drifting on its own slightly-wrong history."
         width={2322}
         height={192}
         strip

@@ -54,6 +54,20 @@ export const posts = [
 
 export const projects = [
   {
+    name: "Eviction as Estimation",
+    slug: "eviction-as-estimation",
+    description: "Reframing KV cache eviction as an estimation problem, and an honest map of when measuring beats accumulating",
+    longDescription: `A language model running with a bounded working memory has to keep deciding which stored items to throw away. What struck me is that every deployed method commits the moment an item arrives: StreamingLLM and H2O decide from the past, SnapKV decides from a guess about the future. So I recast the choice as an estimation problem on a hidden signal, whether an item will be reused, and that puts every existing method on a single axis, the commit lag. Online filters and learned predictors commit at lag zero. Belady's offline optimum sits at the far end, where the whole future is known.
+
+The missing regime is the one in between. Fixed-lag smoothing waits a bounded number of steps, observes which items a correct near-future prediction actually attended to, and only then commits. That measurement, demonstrated utility, turns Belady's unobservable future request into something you can read off the model itself. I instantiated it as a training-free policy called RMM, a strict generalization of H2O that reduces to it exactly when the measurement is uniform.
+
+In controlled settings, where reuse is endogenous and separated in time, it works: demonstrated utility identifies used memory far better than accumulated attention, and a small bounded memory starts behaving like a much larger one. Then I ran it on independent third-party benchmarks inside NVIDIA's KVPress harness, against KVPress's own SnapKV, H2O, and StreamingLLM implementations, and the advantage mostly disappeared. RMM is on par with H2O for single-turn question answering and loses to both H2O and SnapKV in a streaming multi-turn setting.
+
+The cause turned out to be the interesting part. On natural text the model is already correct about most tokens, so weighting attention by correctness barely changes it, and demonstrated utility collapses onto accumulated attention. Measuring only pays when reuse is sharp and endogenous, which is exactly what standard benchmarks do not exercise. The contribution is the framework and an honest map of when measuring beats accumulating, not a new state of the art.`,
+    tags: ["LLM Inference", "KV Cache", "Mechanistic Interpretability", "Python"],
+    link: { label: "Read the paper", url: "https://arxiv.org/abs/2607.24667" },
+  },
+  {
     name: "Ledger Residuals",
     slug: "ledger-residuals",
     description: "A controlled test of whether massive activations are an architectural artifact",
@@ -68,7 +82,7 @@ They didn't. At both 160M and 290M parameters, the models rebuilt massive activa
   {
     name: "nanoOasis",
     slug: "nano-oasis",
-    description: "A diffusion world model you can play in the browser — Snake with no game engine",
+    description: "A diffusion world model you can play in the browser, Snake with no game engine",
     longDescription: `nanoOasis is a diffusion world model. There is no game engine underneath the Snake you play, no grid and no collision code. A neural network hallucinates every frame one at a time, reacting to your keypresses, and it learned the snake, the apple, growing when you eat, and dying when you hit a wall purely from watching pixels. The whole stack is about 2,400 lines of Python, trains end to end for under $50, and runs in your browser over WebGPU.
 
 Getting there was mostly failure. Snake is the fourth game I tried: a platformer was too static to learn from, and Breakout burned roughly $600 of training runs on a ball that kept fading and bricks that would not break. The unlock was not a smarter model but a problem shaped to fit one, a grid game where a single cell is exactly one of the model's tokens, so nothing it ever has to draw is smaller than its atomic unit. The full story, with the math, is in the writeup.`,

@@ -11,7 +11,7 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <li
               key={project.slug}
-              className="grid grid-cols-1 items-baseline gap-x-6 gap-y-1 sm:grid-cols-[170px_1fr]"
+              className="grid grid-cols-1 items-baseline gap-x-6 gap-y-1 sm:grid-cols-[205px_1fr]"
             >
               <Link
                 href={`/projects/${project.slug}`}
