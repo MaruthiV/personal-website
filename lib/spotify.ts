@@ -64,6 +64,19 @@ export type ShelfItem = {
   playedAt: string | null
 }
 
+// Spotify returns each cover in ~640 / 300 / 64px, largest first. The shelf paints
+// covers at 140px, so the 640px original is ~4x more pixels than any screen can use:
+// across 15 sleeves that was 2.2MB of album art for one visible cover (the other 14
+// sit behind `visibility: hidden`, which still downloads them). Take the smallest
+// image that is still >=300px, which is 2x retina at 140px and identical on screen.
+const pickCover = (images: any[] | undefined): string => {
+  if (!images?.length) return ""
+  const usable = images
+    .filter((img) => typeof img?.width === "number" && img.width >= 300)
+    .sort((a, b) => a.width - b.width)
+  return (usable[0] ?? images[0])?.url ?? ""
+}
+
 const mapTrack = (
   t: any,
   extra: { isPlaying?: boolean; playedAt?: string },
@@ -71,7 +84,7 @@ const mapTrack = (
   track: t?.name ?? "",
   artist: t?.artists?.map((a: any) => a.name).join(", ") ?? "",
   album: t?.album?.name ?? "",
-  cover: t?.album?.images?.[0]?.url ?? "",
+  cover: pickCover(t?.album?.images),
   url: t?.external_urls?.spotify ?? "",
   isPlaying: !!extra.isPlaying,
   playedAt: extra.playedAt ?? null,

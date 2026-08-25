@@ -16,20 +16,19 @@ const latest = [
   .map((s) => ({ ...s, project: projects.find((p) => p.slug === s.slug)! }))
   .filter((s) => s.project)
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ disc?: string }>
-}) {
-  const sp = await searchParams
-  const disc = sp.disc != null && sp.disc !== "" ? Number(sp.disc) : null
-  // Default: most-recent record (index 0) popped open.
-  const initialActive = disc != null && Number.isFinite(disc) ? disc : 0
+// Prerender this page and refresh it in the background every 60s, matching the
+// shelf cache in lib/spotify. Visitors are then served static HTML from the CDN
+// instead of waiting on a server render: a cold render blocked on Spotify for
+// ~800ms, and because the page previously read searchParams (for a `?disc=`
+// param nothing ever linked to) it could never be cached at all.
+export const revalidate = 60
 
-  // Fetch the shelf server-side so the first paint already shows real albums —
-  // no flash of the hardcoded fallback. The client still refreshes on mount.
-  // (Accessing searchParams above already opts this page into dynamic rendering,
-  // so this runs fresh per request.)
+export default async function Home() {
+  // Default: most-recent record (index 0) popped open.
+  const initialActive = 0
+
+  // Fetch the shelf server-side so the first paint already shows real albums,
+  // with no flash of the hardcoded fallback.
   let initialDiscs: Awaited<ReturnType<typeof getShelfItems>> = []
   try {
     initialDiscs = await getShelfItems(15)
